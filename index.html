@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Bar with Formspree</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 250px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 8px 15px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    #msg {
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Search Anything</h2>
+
+  <form id="searchForm" action="https://formspree.io/f/xpwjodnd" method="POST">
+    <input type="text" name="search_query" placeholder="Type something..." required>
+    <button type="submit">Search</button>
+  </form>
+
+  <p id="msg">✅ Thanks, your search was submitted!</p>
+
+  <script>
+    const form = document.getElementById('searchForm');
+    const msg = document.getElementById('msg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // stop normal redirect
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        msg.style.display = 'block';
+        form.reset();
+      } else {
+        msg.textContent = "❌ Error submitting form.";
+        msg.style.color = "red";
+        msg.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
